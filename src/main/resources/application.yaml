@@ -1,0 +1,44 @@
+---
+server:
+  port: 8080
+spring:
+  application:
+    name: refresher
+  config:
+    activate:
+      on-profile: default
+  datasource:
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DB}
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    contexts: dev
+    change-log: classpath:db/changelog/db.changelog-master-prod.yaml
+
+cds:
+  index-page:
+    path: services
+    enabled: false
+  security:
+    mock:
+      enabled: false
+  data-source:
+    auto-config:
+      enabled: false
+
+jwt.secret.access: ${JWT_ACCESS_SECRET}
+jwt.secret.refresh: ${JWT_REFRESH_SECRET}
+
+management:
+  endpoint:
+    health:
+      show-components: always # shows individual indicators
+  endpoints:
+    web:
+      exposure:
+        include: health # only expose /health as web endpoint
+  health:
+     defaults.enabled: false # turn off all indicators by default
+     ping.enabled: true
+     db.enabled: true
